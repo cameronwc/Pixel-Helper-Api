@@ -22,8 +22,9 @@ exports.fetchPictures = async function (req, res) {
 
 exports.searchPicture = async function (req, res) {
     let query = req.query.q;
-    let unsplashResult = await searchUnsplash(query);
-    let pexelResult = await searchPexels(query);
+    let page = req.query.page
+    let unsplashResult = await searchUnsplash(query, page);
+    let pexelResult = await searchPexels(query, page);
     unsplashResult = unsplashResult.results.map(photo => (
         helpers.formatUnsplashData(photo)
     ));
