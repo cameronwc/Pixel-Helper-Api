@@ -21,12 +21,16 @@ app.get('/api/pexels/:id', (req, res) => {
     fetchPexelPicture(req, res);
 });
 
-const httpsOptions = {
-    key: fs.readFileSync('./security/cert.key'),
-    cert: fs.readFileSync('./security/cert.pem')
-}
+// const httpsOptions = {
+//     key: fs.readFileSync('./security/cert.key'),
+//     cert: fs.readFileSync('./security/cert.pem')
+// }
 
-const server = https.createServer(httpsOptions, app).listen(PORT, () => {
+// const server = https.createServer(httpsOptions, app).listen(PORT, () => {
+//     console.log('server running at ' + PORT)
+// })
+
+const server = app.listen(PORT, () => {
     console.log('server running at ' + PORT)
 })
 
