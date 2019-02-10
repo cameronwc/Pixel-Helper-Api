@@ -1,11 +1,12 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const { fetchPictures, fetchUnsplashPicture, fetchPexelPicture, searchPicture } = require('./helpers');
 
 app.get('/api', (req, res) => {
-    let length = Object.keys(req.query).length;
-    if(length > 0) {
+    if (req.query.q) {
         searchPicture(req, res);
     } else {
         fetchPictures(req, res)
@@ -20,8 +21,13 @@ app.get('/api/pexels/:id', (req, res) => {
     fetchPexelPicture(req, res);
 });
 
-var server = app.listen(PORT, function () {
-    console.log("Project started on started on localhost:" + PORT)
-});
+const httpsOptions = {
+    key: fs.readFileSync('./security/cert.key'),
+    cert: fs.readFileSync('./security/cert.pem')
+}
+
+const server = https.createServer(httpsOptions, app).listen(PORT, () => {
+    console.log('server running at ' + PORT)
+})
 
 module.exports = server

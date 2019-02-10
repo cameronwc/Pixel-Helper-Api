@@ -11,7 +11,7 @@ describe('api', () => {
                 .get('/api')
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('Object');
+                    res.body.should.be.a('Array');
                     done();
                 });
         })
@@ -21,7 +21,7 @@ describe('api', () => {
                 .get('/api?q=lake')
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('Object');
+                    res.body.should.be.a('Array');
                     done();
                 });
         })

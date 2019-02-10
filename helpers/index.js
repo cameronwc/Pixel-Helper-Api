@@ -1,42 +1,54 @@
+const helpers = require('./helpers.js');
+
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-const UNSPLASH_API_KEY = process.env.UNSPLASH_API_KEY || "ee4740ee5561a46a4cb8473af34b3bf3094027d7708adadfe649d1b1cf9b2888";
-const PEXEL_API_KEY = process.env.PEXEL_API_KEY || "563492ad6f91700001000001236d15ff366e4209ad3303f9267c781c";
-
+const UNSPLASH_API_KEY = process.env.UNSPLASH_API_KEY;
+const PEXEL_API_KEY = process.env.PEXEL_API_KEY;
+const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 // Functions available outside the file
 exports.fetchPictures = async function (req, res) {
-    let unsplashResult = await fetchUnsplashLatest(2);
-    let pexelResult = await fetchPexelLatest(2);
-    let pictures = bundlePictures(unsplashResult, pexelResult);
+    let unsplashResult = await fetchUnsplashLatest(req.query.page);
+    let pexelResult = await fetchPexelLatest(req.query.page);
+    unsplashResult = unsplashResult.map(photo => (
+        helpers.formatUnsplashData(photo)
+    ));
+    pexelResult = pexelResult.photos.map(photo => (
+        helpers.formatPexelData(photo)
+    ));
+    let pictures = helpers.bundlePictures(unsplashResult, pexelResult);
     return res.json(pictures);
 }
 
 exports.searchPicture = async function (req, res) {
-    const unsplashResult = await searchUnsplash('mountains');
-    const pexelResult = await searchPexels('mountains');
-    let pictures = bundlePictures(unsplashResult, pexelResult);
+    let query = req.query.q;
+    let unsplashResult = await searchUnsplash(query);
+    let pexelResult = await searchPexels(query);
+    unsplashResult = unsplashResult.results.map(photo => (
+        helpers.formatUnsplashData(photo)
+    ));
+    pexelResult = pexelResult.photos.map(photo => (
+        helpers.formatPexelData(photo)
+    ));
+    let pictures = helpers.bundlePictures(unsplashResult, pexelResult);
     return res.json(pictures);
 }
 
 exports.fetchUnsplashPicture = async function (req, res) {
-    const unsplashResult = await fetchUnsplashPhoto(req.params.id);
+    let unsplashResult = await fetchUnsplashPhoto(req.params.id);
+    unsplashResult = helpers.formatUnsplashData(unsplashResult);
     return res.json(unsplashResult);
 }
 
 exports.fetchPexelPicture = async function (req, res) {
-    const pexelResult = await fetchPexelPhoto(req.params.id);
+    let pexelResult = await fetchPexelPhoto(req.params.id);
+    pexelResult = helpers.formatPexelData(pexelResult);
     return res.json(pexelResult);
 }
 
-// Helper Functions
-
-function bundlePictures (unsplash, pexel) {
-    return {unsplash, pexel}
-}
-
 // Unsplash
-async function fetchUnsplashLatest(page=1, per_page=15, order_by="latest") {
+
+async function fetchUnsplashLatest(page = 1, per_page = 15, order_by = "latest") {
     const response = await fetchUnsplash(`https://api.unsplash.com/photos?page=${page}&per_page=${per_page}&order_by=${order_by}`);
     return await response.json();
 }
@@ -46,23 +58,29 @@ async function fetchUnsplashPhoto(id) {
     return await response.json();
 }
 
-async function searchUnsplash(query='mountains', page=1) {
-    const response = await fetchUnsplash(`https://api.unsplash.com/search/photos?page=${page}&query=${query}`);
+async function searchUnsplash(query = 'mountains', page = 1) {
+    let response = await fetchUnsplash(`https://api.unsplash.com/search/photos?page=${page}&query=${query}`);
     return await response.json();
 }
 
 async function fetchUnsplash(url) {
-    const response = await fetch(url, {
-        method: 'get',
-        headers: new Headers({
-            'Authorization': `Client-ID ${UNSPLASH_API_KEY}`
-        })
+    let response = new Promise((resolve, reject) => {
+        const response = fetch(url, {
+            method: 'get',
+            headers: new Headers({
+                'Authorization': `Client-ID ${UNSPLASH_API_KEY}`
+            })
+        });
+        if(response.error) {
+            reject(response);
+        }
+        resolve(response);
     });
-    return await response;
+    return response;
 }
 
 // Pexels
-async function fetchPexelLatest(per_page=15, page=1) {
+async function fetchPexelLatest(per_page = 15, page = 1) {
     const response = await fetchPexels(`https://api.pexels.com/v1/curated?per_page=${per_page}&page=${page}`);
     return await response.json();
 }
@@ -72,7 +90,7 @@ async function fetchPexelPhoto(id) {
     return await response.json();
 }
 
-async function searchPexels(query='mountains', per_page=15, page=1) {
+async function searchPexels(query = 'mountains', per_page = 15, page = 1) {
     const response = await fetchPexels(`https://api.pexels.com/v1/search?query=${query}&per_page=${per_page}&page=${page}`);
     return await response.json();
 }
