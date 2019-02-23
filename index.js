@@ -2,8 +2,16 @@ const express = require('express');
 const https = require('https');
 const fs = require('fs');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 const { fetchPictures, fetchUnsplashPicture, fetchPexelPicture, searchPicture } = require('./helpers');
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Credentials', true)
+    res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    next();
+  });
 
 app.get('/api', (req, res) => {
     if (req.query.q) {
@@ -34,4 +42,4 @@ const server = app.listen(PORT, () => {
     console.log('server running at ' + PORT)
 })
 
-module.exports = server
+// module.exports = server

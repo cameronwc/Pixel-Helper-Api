@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha"
+    "test": "nyc mocha",
+    "start": "index.js"
   },
   "author": "Cameron Cooper",
   "license": "ISC",

@@ -6,10 +6,14 @@ require('isomorphic-fetch');
 const UNSPLASH_API_KEY = process.env.UNSPLASH_API_KEY;
 const PEXEL_API_KEY = process.env.PEXEL_API_KEY;
 const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
+
 // Functions available outside the file
 exports.fetchPictures = async function (req, res) {
     let unsplashResult = await fetchUnsplashLatest(req.query.page);
     let pexelResult = await fetchPexelLatest(req.query.page);
+    if(unsplashResult.errors || pexelResult.error) {
+        return res.json({"error": "api limit"});
+    }
     unsplashResult = unsplashResult.map(photo => (
         helpers.formatUnsplashData(photo)
     ));
@@ -25,6 +29,9 @@ exports.searchPicture = async function (req, res) {
     let page = req.query.page
     let unsplashResult = await searchUnsplash(query, page);
     let pexelResult = await searchPexels(query, page);
+    if(unsplashResult.errors || pexelResult.error) {
+        return res.json({"error": "api limit"});
+    }
     unsplashResult = unsplashResult.results.map(photo => (
         helpers.formatUnsplashData(photo)
     ));
