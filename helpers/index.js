@@ -11,15 +11,17 @@ const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 exports.fetchPictures = async function (req, res) {
     let unsplashResult = await fetchUnsplashLatest(req.query.page);
     let pexelResult = await fetchPexelLatest(req.query.page);
-    if(unsplashResult.errors || pexelResult.error) {
+    if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
     }
     unsplashResult = unsplashResult.map(photo => (
         helpers.formatUnsplashData(photo)
     ));
-    pexelResult = pexelResult.photos.map(photo => (
-        helpers.formatPexelData(photo)
-    ));
+    if(!pexelResult.error){
+        pexelResult = pexelResult.photos.map(photo => (
+            helpers.formatPexelData(photo)
+        ));
+    }
     let pictures = helpers.bundlePictures(unsplashResult, pexelResult);
     return res.json(pictures);
 }

@@ -6,7 +6,9 @@ Shuffle = (o) => {
 exports.bundlePictures = (unsplash, pexels) => {
     let bundle = [];
     unsplash.forEach(photo => bundle.push(photo));
-    pexels.forEach(photo => bundle.push(photo));
+    if(!pexels.error) {
+        pexels.forEach(photo => bundle.push(photo));
+    }
     return Shuffle(bundle);
 }
 

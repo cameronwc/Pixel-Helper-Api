@@ -2,8 +2,8 @@ const express = require('express');
 const https = require('https');
 const fs = require('fs');
 const app = express();
-const PORT = process.env.PORT || 3002;
-const { fetchPictures, fetchUnsplashPicture, fetchPexelPicture, searchPicture } = require('./helpers');
+const PORT = process.env.PORT || 3006;
+const { fetchPictures, fetchUnsplashPicture, fechPexelPicture, searchPicture } = require('./helpers');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
