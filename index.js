@@ -2,7 +2,7 @@ const express = require('express');
 const https = require('https');
 const fs = require('fs');
 const app = express();
-const PORT = process.env.PORT || 3006;
+const PORT = process.env.PORT || 3000;
 const { fetchPictures, fetchUnsplashPicture, fechPexelPicture, searchPicture } = require('./helpers');
 
 app.use((req, res, next) => {

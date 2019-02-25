@@ -14,15 +14,7 @@ exports.fetchPictures = async function (req, res) {
     if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
     }
-    unsplashResult = unsplashResult.map(photo => (
-        helpers.formatUnsplashData(photo)
-    ));
-    if(!pexelResult.error){
-        pexelResult = pexelResult.photos.map(photo => (
-            helpers.formatPexelData(photo)
-        ));
-    }
-    let pictures = helpers.bundlePictures(unsplashResult, pexelResult);
+    let pictures = mapPictures(unsplashResult, pexelResult);
     return res.json(pictures);
 }
 
@@ -31,16 +23,10 @@ exports.searchPicture = async function (req, res) {
     let page = req.query.page
     let unsplashResult = await searchUnsplash(query, page);
     let pexelResult = await searchPexels(query, page);
-    if(unsplashResult.errors || pexelResult.error) {
+    if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
     }
-    unsplashResult = unsplashResult.results.map(photo => (
-        helpers.formatUnsplashData(photo)
-    ));
-    pexelResult = pexelResult.photos.map(photo => (
-        helpers.formatPexelData(photo)
-    ));
-    let pictures = helpers.bundlePictures(unsplashResult, pexelResult);
+    let pictures = mapPictures(unsplashResult, pexelResult);
     return res.json(pictures);
 }
 
@@ -54,6 +40,18 @@ exports.fetchPexelPicture = async function (req, res) {
     let pexelResult = await fetchPexelPhoto(req.params.id);
     pexelResult = helpers.formatPexelData(pexelResult);
     return res.json(pexelResult);
+}
+
+function mapPictures(unsplashResult, pexelResult) {
+    unsplashResult = unsplashResult.map(photo => (
+        helpers.formatUnsplashData(photo)
+    ));
+    if(!pexelResult.error){
+        pexelResult = pexelResult.photos.map(photo => (
+            helpers.formatPexelData(photo)
+        ));
+    }
+    return helpers.bundlePictures(unsplashResult, pexelResult);
 }
 
 // Unsplash
