@@ -3,15 +3,25 @@ Shuffle = (o) => {
 	return o;
 };
 
-exports.bundlePictures = (unsplash, pexels) => {
-    let bundle = [];
-    unsplash.forEach(photo => bundle.push(photo));
-    if(!pexels.error) {
-        pexels.forEach(photo => bundle.push(photo));
-    }
+exports.bundlePictures = (...pictures) => {
+    let bundle = [pictures];
     return Shuffle(bundle);
 }
 
+
+exports.formatPixabayData = (photo) => {
+    if(photo.errors){
+        return photo;
+    }
+    return {
+        id: photo.id,
+        width: photo.imageWidth,
+        height: photo.imageHeight,
+        display_url: photo.largeImageURL,
+        download_link: photo.largeImageURL,
+        source: 'Pixabay'
+    }
+}
 
 exports.formatUnsplashData = (photo) => {
     if(photo.errors){

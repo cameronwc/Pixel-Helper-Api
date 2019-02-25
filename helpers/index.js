@@ -11,10 +11,11 @@ const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 exports.fetchPictures = async function (req, res) {
     let unsplashResult = await fetchUnsplashLatest(req.query.page);
     let pexelResult = await fetchPexelLatest(req.query.page);
+    let pixabayResult = await fetchPixabayLatest(req.query.page);
     if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
     }
-    let pictures = mapPictures(unsplashResult, pexelResult);
+    let pictures = mapPictures(unsplashResult, pexelResult, pixabayResult);
     return res.json(pictures);
 }
 
@@ -42,16 +43,42 @@ exports.fetchPexelPicture = async function (req, res) {
     return res.json(pexelResult);
 }
 
-function mapPictures(unsplashResult, pexelResult) {
+function mapPictures(unsplashResult, pexelResult, pixabayResult) {
     unsplashResult = unsplashResult.map(photo => (
         helpers.formatUnsplashData(photo)
     ));
+
     if(!pexelResult.error){
         pexelResult = pexelResult.photos.map(photo => (
             helpers.formatPexelData(photo)
         ));
     }
-    return helpers.bundlePictures(unsplashResult, pexelResult);
+    console.log(pixabayResult.hits[0]);
+    pixabayResult = pixabayResult.hits.map(photo => (
+        helpers.formatPixabayData(photo)
+    ));
+    return helpers.bundlePictures(unsplashResult, pexelResult, pixabayResult);
+}
+
+// Pixabay
+
+async function fetchPixabayLatest(page = 1, per_page = 15, order_by = "latest") {
+    const response = await fetchPixabay(`https://pixabay.com/api/?image_type=photo&page=${page}`)
+    return response.json();
+}
+
+async function fetchPixabay(url) {
+    url = url + `&key=${PIXABAY_API_KEY}`;
+    let response = new Promise((resolve, reject) => {
+        const response = fetch(url, {
+            method: 'get'
+        });
+        if(response.error) {
+            reject(response);
+        }
+        resolve(response);
+    });
+    return response;
 }
 
 // Unsplash
