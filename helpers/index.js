@@ -24,10 +24,11 @@ exports.searchPicture = async function (req, res) {
     let page = req.query.page
     let unsplashResult = await searchUnsplash(query, page);
     let pexelResult = await searchPexels(query, page);
+    let pixabayResult = await searchPixabay(query, page);
     if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
     }
-    let pictures = mapPictures(unsplashResult, pexelResult);
+    let pictures = mapPictures(unsplashResult.results, pexelResult, pixabayResult);
     return res.json(pictures);
 }
 
@@ -63,6 +64,11 @@ function mapPictures(unsplashResult, pexelResult, pixabayResult) {
 
 async function fetchPixabayLatest(page = 1, per_page = 15, order_by = "latest") {
     const response = await fetchPixabay(`https://pixabay.com/api/?image_type=photo&page=${page}`)
+    return response.json();
+}
+
+async function searchPixabay(query = 'mountains', page = 1) {
+    let response = await fetchPixabay(`https://pixabay.com/api/?q=${query}&image_type=photo&page=${page}`)
     return response.json();
 }
 
