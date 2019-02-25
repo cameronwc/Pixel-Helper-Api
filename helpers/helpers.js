@@ -3,11 +3,15 @@ Shuffle = (o) => {
 	return o;
 };
 
-exports.bundlePictures = (...pictures) => {
-    let bundle = [pictures];
+exports.bundlePictures = (unsplash, pexels, pixabay) => {
+    let bundle = [];
+    unsplash.forEach(photo => bundle.push(photo));
+    if(!pexels.error) {
+        pexels.forEach(photo => bundle.push(photo));
+    }
+    pixabay.forEach(photo => bundle.push(photo));
     return Shuffle(bundle);
 }
-
 
 exports.formatPixabayData = (photo) => {
     if(photo.errors){

@@ -53,7 +53,6 @@ function mapPictures(unsplashResult, pexelResult, pixabayResult) {
             helpers.formatPexelData(photo)
         ));
     }
-    console.log(pixabayResult.hits[0]);
     pixabayResult = pixabayResult.hits.map(photo => (
         helpers.formatPixabayData(photo)
     ));
