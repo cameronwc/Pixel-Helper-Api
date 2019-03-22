@@ -36,25 +36,25 @@ describe('api', () => {
                 });
         })
 
-        it('it should GET a picture for an Pexel id', (done) => {
-            chai.request(server)
-                .get('/api/pexels/805295')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('Object');
-                    done();
-                });
-        })
+        // it('it should GET a picture for an Pexel id', (done) => {
+        //     chai.request(server)
+        //         .get('/api/pexels/805295')
+        //         .end((err, res) => {
+        //             res.should.have.status(200);
+        //             res.body.should.be.a('Object');
+        //             done();
+        //         });
+        // })
 
-        it('it should not GET a picture for an improper Pexel id', (done) => {
-            chai.request(server)
-                .get('/api/pexels/xyz')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.include({"error": "Not Found"});
-                    done();
-                });
-        })
+        // it('it should not GET a picture for an improper Pexel id', (done) => {
+        //     chai.request(server)
+        //         .get('/api/pexels/xyz')
+        //         .end((err, res) => {
+        //             res.should.have.status(200);
+        //             res.body.should.include({"error": "Not Found"});
+        //             done();
+        //         });
+        // })
 
         it('it should not GET a picture for an improper Unsplash id', (done) => {
             chai.request(server)
