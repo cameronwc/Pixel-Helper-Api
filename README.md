@@ -11,6 +11,14 @@ Install Dependencies
 npm i
 ```
 
+Export your api keys.
+
+```
+PEXEL_API_KEY="your pexel api key"
+UNSPLASH_API_KEY="your unsplash api key"
+PIXABAY_API_KEY="pixababy api key"
+```
+
 Run Server
 ```
 node index.js
