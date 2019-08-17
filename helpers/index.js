@@ -7,11 +7,15 @@ const UNSPLASH_API_KEY = process.env.UNSPLASH_API_KEY;
 const PEXEL_API_KEY = process.env.PEXEL_API_KEY;
 const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 
+if(!UNSPLASH_API_KEY || !PEXEL_API_KEY || !PIXABAY_API_KEY) {
+    console.log("Please add your PEXEL_API_KEY, UNSPASH_API_KEY, and PIXABAY_API_KEY to your environmental variables.")
+    process.exit(1)
+}
+
 // Functions available outside the file
 exports.fetchPictures = async function (req, res) {
     let unsplashResult = await fetchUnsplashLatest(req.query.page);
-    // let pexelResult = await fetchPexelLatest(req.query.page);
-    let pexelResult = "";
+    let pexelResult = await fetchPexelLatest(req.query.page);
     let pixabayResult = await fetchPixabayLatest(req.query.page);
     if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
@@ -24,8 +28,7 @@ exports.searchPicture = async function (req, res) {
     let query = req.query.q;
     let page = req.query.page
     let unsplashResult = await searchUnsplash(query, page);
-    // let pexelResult = await searchPexels(query, page);
-    let pexelResult = "";
+    let pexelResult = await searchPexels(query, page);
     let pixabayResult = await searchPixabay(query, page);
     if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
@@ -50,12 +53,11 @@ function mapPictures(unsplashResult, pexelResult, pixabayResult) {
     unsplashResult = unsplashResult.map(photo => (
         helpers.formatUnsplashData(photo)
     ));
-
-    // if(!pexelResult.error){
-    //     pexelResult = pexelResult.photos.map(photo => (
-    //         helpers.formatPexelData(photo)
-    //     ));
-    // }
+    if(!pexelResult.error){
+        pexelResult = pexelResult.photos.map(photo => (
+            helpers.formatPexelData(photo)
+        ));
+    }
     pixabayResult = pixabayResult.hits.map(photo => (
         helpers.formatPixabayData(photo)
     ));

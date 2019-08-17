@@ -27,7 +27,7 @@ node index.js
 Browse to [localhost:3000](localhost:3000)
 
 ## Testing
-This API is 100% tested with Mocha and Chai
+This API is 90% tested with Mocha and Chai
 
 To run these test
 ```
