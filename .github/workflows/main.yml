@@ -1,0 +1,30 @@
+name: build and integration test
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: builds image
+        run: |
+          sudo apt update
+          sudo apt upgrade
+          sudo apt install curl
+          cd $GITHUB_WORKSPACE 
+          docker build -t pixel-helper-api:build .
+          docker run -p 3000:3000 pixel-helper-api:build &
+          RES=$(sleep 5 && curl -o /dev/null --silent --head --write-out '%{http_code}\n' http://0.0.0.0:3000)
+          if [[ $RES == 200 ]]; then
+            echo "Successful Build Babybeee"
+            exit 0
+          else
+            echo "Ya dun fucked up"
+            exit 1
+          fi

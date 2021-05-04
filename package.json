@@ -5,20 +5,22 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha",
-    "start": "index.js"
+    "start": "node index.js",
+    "lint": "npx eslint ."
   },
   "author": "Cameron Cooper",
   "license": "ISC",
   "dependencies": {
-    "es6-promise": "^4.2.5",
-    "express": "^4.16.4",
-    "isomorphic-fetch": "^2.2.1",
-    "unsplash-js": "^4.8.0"
+    "es6-promise": "^4.2.8",
+    "express": "^4.17.1",
+    "isomorphic-fetch": "^3.0.0",
+    "unsplash-js": "^7.0.10"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-http": "^4.2.1",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0"
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "eslint": "^7.25.0",
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0"
   }
 }
