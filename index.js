@@ -1,9 +1,7 @@
 const express = require('express');
-const https = require('https');
-const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
-const { fetchPictures, fetchUnsplashPicture, fechPexelPicture, searchPicture } = require('./helpers');
+const { fetchPictures, fetchUnsplashPicture, fetchPexelPicture, searchPicture } = require('./helpers');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
@@ -28,15 +26,6 @@ app.get('/api/unsplash/:id', (req, res) => {
 app.get('/api/pexels/:id', (req, res) => {
     fetchPexelPicture(req, res);
 });
-
-// const httpsOptions = {
-//     key: fs.readFileSync('./security/cert.key'),
-//     cert: fs.readFileSync('./security/cert.pem')
-// }
-
-// const server = https.createServer(httpsOptions, app).listen(PORT, () => {
-//     console.log('server running at ' + PORT)
-// })
 
 const server = app.listen(PORT, () => {
     console.log('server running at ' + PORT)

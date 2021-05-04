@@ -1,4 +1,4 @@
-Shuffle = (o) => {
+const shuffle = (o) => {
 	for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
 	return o;
 };
@@ -10,17 +10,16 @@ exports.bundlePictures = (unsplash, pexels, pixabay) => {
         pexels.forEach(photo => bundle.push(photo));
     }
     pixabay.forEach(photo => bundle.push(photo));
-    return Shuffle(bundle);
+    return shuffle(bundle);
 }
 
 exports.formatPixabayData = (photo) => {
     if(photo.errors){
         return photo;
     }
+    let alt = null;
     if(photo.tags) {
         alt = photo.tags.charAt(0).toUpperCase() + photo.tags.slice(1);
-    } else {
-        alt = null;
     }
     return {
         id: photo.id,
@@ -37,10 +36,9 @@ exports.formatUnsplashData = (photo) => {
     if(photo.errors){
         return photo;
     }
+    let alt = photo.description = null;
     if(photo.description){
         alt = photo.description.charAt(0).toUpperCase() + photo.description.slice(1);
-    } else {
-        alt = photo.description = null;
     }
     return {
         id: photo.id,
@@ -59,11 +57,11 @@ exports.formatPexelData = (photo) => {
     if(photo.error) {
         return photo;
     }
-    url_array = photo.url.split("/");
-    alt_fragment = url_array[url_array.length - 2].split("-");
+    const url_array = photo.url.split("/");
+    const alt_fragment = url_array[url_array.length - 2].split("-");
     alt_fragment.pop()
-    lowercase_alt = alt_fragment.join(" ");
-    alt = lowercase_alt.charAt(0).toUpperCase() + lowercase_alt.slice(1);
+    const lowercase_alt = alt_fragment.join(" ");
+    const alt = lowercase_alt.charAt(0).toUpperCase() + lowercase_alt.slice(1);
     return {
         id: photo.id,
         width: photo.width,

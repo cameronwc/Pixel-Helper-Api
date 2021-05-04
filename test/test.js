@@ -1,7 +1,7 @@
+const { expect } = require('chai');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../index.js');
-let should = chai.should();
 
 chai.use(chaiHttp);
 describe('api', () => {
@@ -10,8 +10,8 @@ describe('api', () => {
             chai.request(server)
                 .get('/api')
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('Array');
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an('Array');
                     done();
                 });
         })
@@ -20,8 +20,8 @@ describe('api', () => {
             chai.request(server)
                 .get('/api?q=lake')
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('Array');
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an('Array');
                     done();
                 });
         })
@@ -30,8 +30,8 @@ describe('api', () => {
             chai.request(server)
                 .get('/api/unsplash/y8iR4t4MTF8')
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('Object');
+                    expect(res).to.have.status(200);
+                    expect(res.body).to.be.an('Object');
                     done();
                 });
         })
@@ -60,8 +60,8 @@ describe('api', () => {
             chai.request(server)
                 .get('/api/unsplash/xyz')
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    Object.keys(res.body).should.include("errors");
+                    expect(res).to.have.status(200);
+                    expect(Object.keys(res.body)).to.have.members([ 'errors' ]);
                     done();
                 });
         })

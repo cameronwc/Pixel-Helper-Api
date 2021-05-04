@@ -8,15 +8,15 @@ const PEXEL_API_KEY = process.env.PEXEL_API_KEY;
 const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 
 if(!UNSPLASH_API_KEY || !PEXEL_API_KEY || !PIXABAY_API_KEY) {
-    console.log("Please add your PEXEL_API_KEY, UNSPASH_API_KEY, and PIXABAY_API_KEY to your environmental variables.")
+    console.log("Please add your PEXEL_API_KEY, UNSPLASH_API_KEY, and PIXABAY_API_KEY to your environmental variables.")
     process.exit(1)
 }
 
 // Functions available outside the file
 exports.fetchPictures = async function (req, res) {
-    let unsplashResult = await fetchUnsplashLatest(req.query.page);
-    let pexelResult = await fetchPexelLatest(req.query.page);
-    let pixabayResult = await fetchPixabayLatest(req.query.page);
+    const unsplashResult = await fetchUnsplashLatest(req.query.page);
+    const pexelResult = await fetchPexelLatest(req.query.page);
+    const pixabayResult = await fetchPixabayLatest(req.query.page);
     if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
     }
@@ -25,16 +25,14 @@ exports.fetchPictures = async function (req, res) {
 }
 
 exports.searchPicture = async function (req, res) {
-    let query = req.query.q;
-    let page = req.query.page
-    let unsplashResult = await searchUnsplash(query, page);
-    let pexelResult = await searchPexels(query, page);
-    let pixabayResult = await searchPixabay(query, page);
+    const {q, page} = req.query;
+    const unsplashResult = await searchUnsplash(q, page);
+    const pexelResult = await searchPexels(q, page);
+    const pixabayResult = await searchPixabay(q, page);
     if(unsplashResult.errors) {
         return res.json({"error": "api limit"});
     }
-    let pictures = mapPictures(unsplashResult.results, pexelResult, pixabayResult);
-    return res.json(pictures);
+    return res.json(mapPictures(unsplashResult.results, pexelResult, pixabayResult));
 }
 
 exports.fetchUnsplashPicture = async function (req, res) {
@@ -65,7 +63,7 @@ function mapPictures(unsplashResult, pexelResult, pixabayResult) {
 }
 
 // Pixabay
-async function fetchPixabayLatest(page = 1, per_page = 15, order_by = "latest") {
+async function fetchPixabayLatest(page = 1) {
     const response = await fetchPixabay(`https://pixabay.com/api/?image_type=photo&page=${page}`)
     return response.json();
 }
