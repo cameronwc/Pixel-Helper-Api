@@ -13,6 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: builds image
+        env:
+          UNSPLASH_API_KEY: ${{ secrets.UNSPLASH_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          PEXEL_API_KEY: ${{ secrets.PEXEL_API_KEY }}
         run: |
           sudo apt update
           sudo apt upgrade
