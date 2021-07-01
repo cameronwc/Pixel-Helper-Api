@@ -1,4 +1,4 @@
-name: build and integration test
+name: Build/Integration Test
 on:
   push:
     branches: [ master ]
