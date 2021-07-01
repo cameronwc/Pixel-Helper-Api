@@ -5,6 +5,7 @@
 ![snyk](https://github.com/cameronwc/pixel-helper-api/actions/workflows/snyk.yml/badge.svg)
 ![deploy](https://github.com/cameronwc/pixel-helper-api/actions/workflows/deploy.yml/badge.svg)
 [![Docker Hub](https://img.shields.io/docker/cloud/build/cameronwc/pixel-helper-api?label=Docker&style=flat)](https://hub.docker.com/r/cameronwc/pixel-helper-api/builds)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cameronwc_Pixel-Helper-Api&metric=alert_status)](https://sonarcloud.io/dashboard?id=cameronwc_Pixel-Helper-Api)
 
 ## Requirements
 For this project Nodejs and npm have to be installed on your system.
