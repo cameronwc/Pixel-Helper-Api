@@ -47,7 +47,7 @@ exports.formatUnsplashData = (photo) => {
         urls: photo.urls,
         display_url: photo.urls.regular,
         links: photo.links,
-        download_link: photo.links.download_location,
+        download_link: photo.links.download,
         alt_text: alt,
         source: 'unsplash'
     }
